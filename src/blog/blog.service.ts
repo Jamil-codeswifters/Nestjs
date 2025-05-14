@@ -1,15 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Blog } from './blog.entity';
 import { CreateBlogDto } from './dto/create-blog';
 
 @Injectable()
 export class BlogService {
+  // Removed duplicate method implementation
   constructor(
     @InjectModel(Blog)
     private readonly blogModel: typeof Blog,
   ) {}
-
 
   async create(createBlogDto: CreateBlogDto): Promise<Blog> {
     const { title, content, author, tags } = createBlogDto;
@@ -17,9 +22,16 @@ export class BlogService {
   }
 
   async findAll(): Promise<Blog[]> {
-    return this.blogModel.findAll();
+    try {
+      return this.blogModel.findAll();
+    } catch (error) {
+      throw new HttpException(
+        'server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
-
 
   async findOne(id: number): Promise<Blog> {
     const blog = await this.blogModel.findByPk(id);
@@ -29,11 +41,16 @@ export class BlogService {
     return blog;
   }
 
-
   async update(id: number, updateData: Partial<CreateBlogDto>): Promise<Blog> {
-    const blog = await this.findOne(id);
-    await blog.update(updateData);
-    return blog;
+    try {
+      const blog = await this.findOne(id);
+      await blog.update(updateData);
+      return blog;
+    } catch (error) {
+      throw new HttpException('server error', HttpStatus.NOT_ACCEPTABLE, {
+        cause: error,
+      });
+    }
   }
 
   async remove(id: number): Promise<void> {
@@ -44,5 +61,9 @@ export class BlogService {
     } catch (error) {
       throw new NotFoundException(`Blog with id ${id} not found`);
     }
+  }
+
+  async findOneById(id: number): Promise<Blog | null> {
+    return await this.blogModel.findByPk(id);
   }
 }

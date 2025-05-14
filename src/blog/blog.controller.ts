@@ -6,10 +6,12 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog';
 import { Blog } from './blog.entity';
+import { AuthorGuard } from 'src/gruad/authorGruad';
 
 @Controller('blog')
 export class BlogController {
@@ -21,19 +23,18 @@ export class BlogController {
     return this.blogService.create(createBlogDto);
   }
 
-//    Get all blog posts
+  //    Get all blog posts
   @Get()
   async findAll(): Promise<Blog[]> {
     return this.blogService.findAll();
   }
-
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Blog> {
     return this.blogService.findOne(+id);
   }
 
-
+  @UseGuards(AuthorGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -42,6 +43,7 @@ export class BlogController {
     return this.blogService.update(+id, updateData);
   }
 
+  @UseGuards(AuthorGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return this.blogService.remove(+id);
