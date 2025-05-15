@@ -17,13 +17,11 @@ import { AuthorGuard } from 'src/gruad/authorGruad';
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
-  // ➕ Create a blog post
   @Post('/create')
   async create(@Body() createBlogDto: CreateBlogDto): Promise<Blog> {
     return this.blogService.create(createBlogDto);
   }
 
-  //    Get all blog posts
   @Get()
   async findAll(): Promise<Blog[]> {
     return this.blogService.findAll();

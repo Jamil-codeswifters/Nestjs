@@ -1,9 +1,9 @@
-import { IsString, IsNotEmpty, IsArray, IsOptional, IsDate } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsDate } from "class-validator";
 
 export class CreateBlogDto {
   @IsString()
   @IsNotEmpty()
-  readonly title: string;
+  readonly title: string
 
   @IsString()
   @IsNotEmpty()
@@ -13,11 +13,6 @@ export class CreateBlogDto {
   @IsNotEmpty()
   readonly author: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
-  readonly tags: string[];
-
   @IsOptional()
   @IsDate()
   readonly createdAt: Date;
@@ -25,4 +20,7 @@ export class CreateBlogDto {
   @IsOptional()
   @IsDate()
   readonly updatedAt: Date;
+
+  @IsNotEmpty()
+   readonly userId:number
 }

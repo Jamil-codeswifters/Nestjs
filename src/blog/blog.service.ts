@@ -10,15 +10,14 @@ import { CreateBlogDto } from './dto/create-blog';
 
 @Injectable()
 export class BlogService {
-  // Removed duplicate method implementation
   constructor(
     @InjectModel(Blog)
     private readonly blogModel: typeof Blog,
   ) {}
 
   async create(createBlogDto: CreateBlogDto): Promise<Blog> {
-    const { title, content, author, tags } = createBlogDto;
-    return this.blogModel.create({ title, content, author, tags });
+    const { title, content, author, userId } = createBlogDto;
+    return this.blogModel.create({ title, content, author, userId });
   }
 
   async findAll(): Promise<Blog[]> {
@@ -58,12 +57,15 @@ export class BlogService {
       const blog = await this.findOne(id);
       const user = await blog.destroy();
       return user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new NotFoundException(`Blog with id ${id} not found`);
     }
   }
 
   async findOneById(id: number): Promise<Blog | null> {
-    return await this.blogModel.findByPk(id);
+    return await this.blogModel.findByPk(id, {
+      raw: true,
+    });
   }
 }

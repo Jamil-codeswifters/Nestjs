@@ -4,7 +4,9 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { LoggerMiddleware } from './middleware/logger.middleware';
-import { Sequelize } from 'sequelize-typescript'; // ✅ Use sequelize-typescript instead of raw 'sequelize'
+import { Sequelize } from 'sequelize-typescript'; 
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
 
 const devConfig = {
   port: 3000,
@@ -17,19 +19,20 @@ const prodConfig = {
 @Module({
   imports: [
     SequelizeModule.forRoot({
-      dialect: 'postgres',
+      dialect: 'mysql',
       host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '112233',
+      port: 3306,
+      username: 'root',
+      password: '123',
       database: 'crud',
       autoLoadModels: true,
       synchronize: true,
       logging: console.log,
     }),
     BlogModule,
+    UserModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UserController],
   providers: [
     AppService,
     {

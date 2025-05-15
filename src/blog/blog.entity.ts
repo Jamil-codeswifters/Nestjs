@@ -1,6 +1,14 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+} from 'sequelize-typescript';
+import { User } from 'src/user/user.entity';
 
-@Table({ tableName: 'blogs' })
+@Table
 export class Blog extends Model {
   @Column({
     type: DataType.STRING,
@@ -9,7 +17,7 @@ export class Blog extends Model {
   title: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
     allowNull: false,
   })
   content: string;
@@ -18,11 +26,12 @@ export class Blog extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  author: string;
+  author:string;
 
-  @Column({
-    type: DataType.ARRAY(DataType.STRING),
-    allowNull: false,
-  })
-  tags: string[];
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 }
