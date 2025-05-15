@@ -12,6 +12,7 @@ import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog';
 import { Blog } from './blog.entity';
 import { AuthorGuard } from 'src/gruad/authorGruad';
+import { Public } from 'src/common/decorater/public.decorater';
 
 @Controller('blog')
 export class BlogController {
@@ -33,6 +34,7 @@ export class BlogController {
   }
 
   @UseGuards(AuthorGuard)
+  @Public()
   @Put(':id')
   async update(
     @Param('id') id: string,

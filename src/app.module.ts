@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { LoggerMiddleware } from './middleware/logger.middleware';
-import { Sequelize } from 'sequelize-typescript'; 
+import { Sequelize } from 'sequelize-typescript';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 

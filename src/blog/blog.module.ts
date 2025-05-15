@@ -6,7 +6,7 @@ import { Blog } from './blog.entity';
 import { User } from 'src/user/user.entity';
 
 @Module({
-  imports: [SequelizeModule.forFeature([User,Blog])],
+  imports: [SequelizeModule.forFeature([User, Blog])],
   controllers: [BlogController],
   providers: [BlogService],
 })
