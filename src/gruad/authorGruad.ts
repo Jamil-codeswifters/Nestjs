@@ -17,7 +17,6 @@ export class AuthorGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
 
-    console.log(".............")
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const request = context.switchToHttp().getRequest();
 

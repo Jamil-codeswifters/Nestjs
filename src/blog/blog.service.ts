@@ -3,10 +3,10 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Blog } from './blog.entity';
-import { CreateBlogDto } from './dto/create-blog';
+} from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { Blog } from "./blog.entity";
+import { CreateBlogDto } from "./dto/create-blog";
 
 @Injectable()
 export class BlogService {
@@ -25,7 +25,7 @@ export class BlogService {
       return this.blogModel.findAll();
     } catch (error) {
       throw new HttpException(
-        'server error',
+        "server error",
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error },
       );
@@ -40,13 +40,17 @@ export class BlogService {
     return blog;
   }
 
-  async update(id: number, updateData: Partial<CreateBlogDto>): Promise<Blog> {
+  async update(
+    id: number,
+    req: Request,
+    updateData: Partial<CreateBlogDto>,
+  ): Promise<Blog> {
     try {
       const blog = await this.findOne(id);
       await blog.update(updateData);
       return blog;
     } catch (error) {
-      throw new HttpException('server error', HttpStatus.NOT_ACCEPTABLE, {
+      throw new HttpException("server error", HttpStatus.NOT_ACCEPTABLE, {
         cause: error,
       });
     }

@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { Sequelize } from 'sequelize-typescript';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 const devConfig = {
   port: 3000,
@@ -31,6 +32,7 @@ const prodConfig = {
     }),
     BlogModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController, UserController],
   providers: [
@@ -45,7 +47,7 @@ const prodConfig = {
 })
 export class AppModule implements NestModule {
   constructor(private readonly sequelize: Sequelize) {
-    this.checkDatabaseConnection();
+    void this.checkDatabaseConnection();
   }
 
   async checkDatabaseConnection() {

@@ -1,24 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
-  Put,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
   UseGuards,
-} from '@nestjs/common';
-import { BlogService } from './blog.service';
-import { CreateBlogDto } from './dto/create-blog';
-import { Blog } from './blog.entity';
-import { AuthorGuard } from 'src/gruad/authorGruad';
-import { Public } from 'src/common/decorater/public.decorater';
+} from "@nestjs/common";
+import { AuthGuard } from "src/gruad/auth.gruad";
+import { AuthorGuard } from "src/gruad/authorGruad";
+import { Blog } from "./blog.entity";
+import { BlogService } from "./blog.service";
+import { CreateBlogDto } from "./dto/create-blog";
 
-@Controller('blog')
+@Controller("blog")
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
-  @Post('/create')
+  @Post("/create")
   async create(@Body() createBlogDto: CreateBlogDto): Promise<Blog> {
     return this.blogService.create(createBlogDto);
   }
@@ -28,24 +29,24 @@ export class BlogController {
     return this.blogService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Blog> {
+  @Get(":id")
+  async findOne(@Param("id") id: string): Promise<Blog> {
     return this.blogService.findOne(+id);
   }
 
-  @UseGuards(AuthorGuard)
-  @Public()
-  @Put(':id')
+  @UseGuards(AuthGuard)
+  @Put(":id")
   async update(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body() updateData: Partial<CreateBlogDto>,
+    @Req() req: Request,
   ): Promise<Blog> {
-    return this.blogService.update(+id, updateData);
+    return this.blogService.update(+id, req, updateData);
   }
 
   @UseGuards(AuthorGuard)
-  @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
+  @Delete(":id")
+  async remove(@Param("id") id: string): Promise<void> {
     return this.blogService.remove(+id);
   }
 }
